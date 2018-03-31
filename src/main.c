@@ -42,7 +42,6 @@ int main(void)
         project3();
     #endif
 
-
     while(run){};    
 }
 

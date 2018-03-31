@@ -12,9 +12,6 @@ The included functions are
 5. reverse
 6. reverse_words
 7. free_words
-***Updated for DMA March 27th***
-8. memmove_dma
-9. memset_dma
 
 @author - Scott McElroy
 
@@ -28,7 +25,7 @@ Created for ECEN5813
 #include <stdlib.h>
 #include <stdint.h>
 /*********************************************************************************************/
-/****************************memmove**********************************************************/
+/****************************my_memmove******************************************************/
 /**********************************************************************************************
 @brief - moves memory from one location to another
 
@@ -263,48 +260,6 @@ uint8_t free_words(void *src)
 
     /* Check to see if the src pointer is NULLed (if so return 0). Return 1 if its incorrect*/    
     return ! src  ? 0 : 1; 
-}
-
-/*********************************************************************************************/
-/****************************memmove_dma******************************************************/
-/**********************************************************************************************
-@brief - moves memory from one location to another using the DMA
-
-The memmove_dma function is passed a source and destination address,
-the contents at the source address get temporarily copied completely 
-depending on the length specified when called and then moved to the
-destination address.
-This function is a non-corruption based moved even if the source and 
-destination is overlapping.
-
-@param - *src: source address 
-@param - *dst: destination address
-@param - length: size of data
-@return - dst: destination address
-**********************************************************************************************/
-
-uint8_t  *memmove_dma(uint8_t *src, uint8_t *dst, size_t length)
-{
-
-}
-
-/*********************************************************************************************/
-/*****************************memset**********************************************************/
-/**********************************************************************************************
-@brief - This function set a block of memory to a certain value using the DMA
-
-The memset function is passed a source address and a value,
-the value that is passed on a function call is put into the destinaion address using the DMA
-
-@param - *src: source address 
-@param - length: size of data
-@param - value: value of data
-@return -  src: source address
-**********************************************************************************************/
-
-uint8_t  *memset_dma(uint8_t *src, size_t length, uint8_t value)
-{
-
 }
 
 /*********************************************************************************************/

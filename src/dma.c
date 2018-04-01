@@ -19,6 +19,9 @@ Created for ECEN5813
 
 #include "dma.h"
 
+#ifdef KL25Z_PRO
+extern uint8_t wait_state;
+#endif
 /*********************************************************************************************/
 /****************************memmove_dma******************************************************/
 /**********************************************************************************************
@@ -45,10 +48,13 @@ dma_e memmove_dma(uint8_t *src, uint8_t *dst, uint8_t length, uint8_t type)
         return DMA_PTR_NULL;
     }
     /*Load the value of the source address*/
+    __DMA_SAR0 = 0; /*Clear register*/
     __DMA_SAR0 |= (uint32_t)src;
     /*Load the value of the destination address*/
+    __DMA_DAR0 = 0; /*Clear register*/
     __DMA_DAR0 |= (uint32_t)dst;
     /*Load the values for the DMA DSR register, makes sure that the max is respected*/
+    __DMA_DSR_BCR0 &= ~(MAX_BCR); /*needs a write to clear bcr*/
     __DMA_DSR_BCR0 |= (MAX_BCR & length);
     /*if the length is greater then 1, SINC and DINC are set*/
     if(length > 1)
@@ -67,13 +73,26 @@ dma_e memmove_dma(uint8_t *src, uint8_t *dst, uint8_t length, uint8_t type)
     }else if(type == 16){
         /*Sets the byte size to 16-bit*/
         __DMA_DCR0 |= (DMA0_SSIZE(BIT16_SIZE) + DMA0_DSIZE(BIT16_SIZE));
+    }else if(type == 32){
+        /*Sets the byte size to 32-bit*/
+    	__DMA_DCR0 &= ~(DMA0_SSIZE(BIT32_SIZE) + DMA0_DSIZE(BIT32_SIZE));
     }else{
         return DMA_FAILURE;
     }
-    /*Start conversion and move with DMA*/
-    __DMA_DCR0 |= DMA0_START;
+
     /*Enable DMAMUX*/
     __DMAMUX0_CHCFG0 |= DMAMUX0_EN;
+
+    /*Enable the IRQs in NVIC*/
+    START_CRITICAL(__DMA0_IRQ_NUM);
+
+    /*If running the profiler, then systick start*/
+    #ifdef KL25Z_PRO
+    systick_start();
+    #endif
+
+    /*Start conversion and move with DMA*/
+    __DMA_DCR0 |= DMA0_START;
 
     return DMA_SUCCESS;
 }
@@ -93,21 +112,23 @@ the value that is passed on a function call is put into the destinaion address u
 @return -  dma_e: status of function
 **********************************************************************************************/
 
-dma_e memset_dma(uint8_t *dst, size_t length, uint8_t type, uint8_t value)
+dma_e memset_dma(uint8_t *dst, uint16_t length, uint8_t type, uint8_t value)
 {
     if(dst == NULL)
     {
         return DMA_PTR_NULL;
     }    
-
     uint32_t temp = value;
     uint32_t *temp_ptr = &temp;
 
     /*Load the value of the source address*/
+    __DMA_SAR0 = 0; /*Clear register*/
     __DMA_SAR0 |= (uint32_t)temp_ptr;
     /*Load the value of the destination address*/
+    __DMA_DAR0 = 0; /*Clear register*/
     __DMA_DAR0 |= (uint32_t)dst;
     /*Load the values for the DMA DSR register, makes sure that the max is respected*/
+    __DMA_DSR_BCR0 &= ~(MAX_BCR); /*needs a write to clear bcr*/
     __DMA_DSR_BCR0 |= (MAX_BCR & length);
     /*if the length is greater then 1, SINC and DINC are set*/
     if(length > 1)
@@ -126,13 +147,25 @@ dma_e memset_dma(uint8_t *dst, size_t length, uint8_t type, uint8_t value)
     }else if(type == 16){
         /*Sets the byte size to 16-bit*/
         __DMA_DCR0 |= (DMA0_SSIZE(BIT16_SIZE) + DMA0_DSIZE(BIT16_SIZE));
+    }else if(type == 32){
+        /*Sets the byte size to 32-bit*/
+    	__DMA_DCR0 &= ~(DMA0_SSIZE(BIT32_SIZE) + DMA0_DSIZE(BIT32_SIZE));
     }else{
-        return DMA_FAILURE;
+    	return DMA_FAILURE;
     }
-    /*Start conversion and move with DMA*/
-    __DMA_DCR0 |= DMA0_START;
+
     /*Enable DMAMUX*/
     __DMAMUX0_CHCFG0 |= DMAMUX0_EN;
+
+    /*Enable the IRQs in NVIC*/
+    START_CRITICAL(__DMA0_IRQ_NUM);
+    /*If running the profiler, then systick start*/
+    #ifdef KL25Z_PRO
+    systick_start();
+    #endif
+
+    /*Start conversion and move with DMA*/
+    __DMA_DCR0 |= DMA0_START;
 
     return DMA_SUCCESS;
 }
@@ -156,8 +189,6 @@ void dma_init(void)
     __DMAMUX0_CHCFG0 &= ~(DMAMUX0_EN + DMAMUX0_TRIG);
     /*Load the source mux for the DMA as an always-on pass through*/
     __DMAMUX0_CHCFG0 |= DMA0_SRC63;
-    /*Enable the IRQs in NVIC*/
-   START_CRITICAL(__DMA_IRQ_NUM);
     /*Enable the IRQs in DMA*/
    __DMA_DCR0 |= DMA0_EINT;
 }
@@ -173,9 +204,19 @@ void dma_init(void)
 
 void DMA0_IRQHandler(void)
 {
+	/*Used for the profiler in the KL25Z testing*/
+    #ifdef KL25Z_PRO
+	systick_end();
+    wait_state = 1;
+    #endif
+    /*Turn the DMA interrupt off*/
+
+    END_CRITICAL(__DMA0_IRQ_NUM);
+
     return;
 }
 
 /*********************************************************************************************/
 /*****************************End of File*****************************************************/
 /*********************************************************************************************/
+

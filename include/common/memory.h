@@ -113,7 +113,7 @@ The function returns the location of the newly allocated memory.
 @return - mem_loc: Returns the location address of the reserved memory block
 **********************************************************************************************/
 
-void *reserve_words(size_t length);
+void *reserve_words(uint32_t length);
 
 /**********************************************************************************************
 brief - This functions frees a block of memory that was reserved

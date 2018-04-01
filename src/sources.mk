@@ -5,7 +5,7 @@
 #
 #@author - Scott McElroy
 #
-#@data - February 11, 2018
+#@data - March 31, 2018
 #
 #**************************************************************************#
 
@@ -13,10 +13,18 @@
 ifeq ($(PLATFORM),KL25Z)
 SRCS = ./data1.c ./debug.c ./memory.c ./conversion.c \
 ./project1.c ./arch_arm32.c ./main.c ./gpio.c ./circbuf.c ./uart.c \
-./system_MKL25Z4.c ./startup_MKL25Z4.S ./project2.c
+./system_MKL25Z4.c ./startup_MKL25Z4.S ./project2.c ./dma.c \
+./mem_profiler_kl25z.c ./project3.c
+
+else ifeq ($(PLATFORM),KL25Z_PRO)
+SRCS = ./memory.c ./main.c ./dma.c \
+./mem_profiler_kl25z.c ./project3.c \
+./system_MKL25Z4.c ./startup_MKL25Z4.S
+
 else ifeq ($(PLATFORM),BBB)
 SRCS = ./data1.c ./debug.c ./memory.c ./conversion.c \
-./project1.c ./main.c ./circbuf.c
+./project1.c ./main.c ./circbuf.c ./project3.c ./project2.c
+
 else ifeq ($(PLATFORM),HOST)
 SRCS = ./data1.c ./debug.c ./memory.c ./conversion.c \
 ./project1.c ./main.c ./circbuf.c

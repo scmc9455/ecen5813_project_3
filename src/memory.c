@@ -229,13 +229,11 @@ The function returns the location of the newly allocated memory.
 @param - length: address of reserved memory
 @return - mem_loc: Returns the location address of the reserved memory block
 **********************************************************************************************/
-void * reserve_words(size_t length)
+void * reserve_words(uint32_t length)
 {
-    uint32_t byte_size = 4;
-
     if(length > 0)
     {  
-        return (void *) malloc(length*(byte_size));
+        return (void *) malloc(length);
     }else{
         return NULL; 
     }

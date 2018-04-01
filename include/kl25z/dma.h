@@ -22,6 +22,11 @@ Created for ECEN5813
 
 #include <stdlib.h>
 #include <stdint.h>
+
+#ifdef KL25Z_PRO
+#include "mem_profiler_kl25z.h"
+#endif
+
 /*registers direct address MACROs*/
 #define __SIM_SCGC6       (*((volatile uint32_t *)(0x4004803C)))
 #define __SIM_SCGC7       (*((volatile uint32_t *)(0x40048040)))
@@ -49,29 +54,14 @@ Created for ECEN5813
 /*MACROS for IRQ*/
 #define __DMA0_IRQ_NUM    (1 << 0)
 
-#ifndef __NVIC_SET_EN_REG
 #define __NVIC_SET_EN_REG     (*((volatile uint32_t *)(0xE000E100)))
-#endif
-
-#ifndef __NVIC_CLR_EN_REG
 #define __NVIC_CLR_EN_REG     (*((volatile uint32_t *)(0xE000E180)))
-#endif
+#define __NVIC_CLR_PEND_REG   (*((volatile uint32_t *)(0xE000E280)))
 
-#ifndef __disable_NVIC_IRQ(x)
-#define __disable_NVIC_IRQ(x) (__NVIC_CLR_EN_REG |= (x))
-#endif
-
-#define __enable_NVIC_IRQ(x)
-#define __enable_NVIC_IRQ(x)  (__NVIC_SET_EN_REG |= (x))
-#endif
-
-#define START_CRITICAL(x)
-#define START_CRITICAL(x)     (__enable_NVIC_IRQ(x))
-#endif
-
-#define END_CRITICAL(x)
-#define END_CRITICAL(x)       (__disable_NVIC_IRQ(x))
-#endif
+#define disable_NVIC_IRQ(x) (__NVIC_CLR_EN_REG |= (x))
+#define enable_NVIC_IRQ(x)  (__NVIC_SET_EN_REG |= (x))
+#define START_CRITICAL(x)     (enable_NVIC_IRQ(x))
+#define END_CRITICAL(x)       (disable_NVIC_IRQ(x))
 
 typedef enum{
     DMA_FAILURE = 0,
@@ -115,7 +105,7 @@ the value that is passed on a function call is put into the destinaion address u
 @return -  dma_e: status of function
 **********************************************************************************************/
 
-dma_e memset_dma(uint8_t *dst, size_t length, uint8_t type, uint8_t value);
+dma_e memset_dma(uint8_t *dst, uint16_t length, uint8_t type, uint8_t value);
 
 /*********************************************************************************************/
 /*****************************dma_init********************************************************/
@@ -144,3 +134,4 @@ void DMA0_IRQHandler(void);
 /*********************************************************************************************/
 /*****************************End of File*****************************************************/
 /*********************************************************************************************/
+

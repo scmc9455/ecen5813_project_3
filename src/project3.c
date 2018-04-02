@@ -1,3 +1,4 @@
+
 /*********************************************************************************************
 @file - project3.c
 @brief - project3.c file is the header file for the project3 testing functionality
@@ -27,7 +28,7 @@ void project3(void)
 {
     #ifdef KL25Z_PRO
 	/*********************************************************************/
-    /******************Profiler run for memset using DMA on KL25Z*********/
+    /*##########Profiler run for memset using DMA on KL25Z###############*/
 	/*********************************************************************/
 	/*needed variables for the program*/
 	uint32_t memset_dma_kl25z_count_10 = 0;
@@ -49,7 +50,7 @@ void project3(void)
     /******************************************************************************/
 
     /**********************************************************************/
-    /******************Profiler run for memmove using DMA on KL25Z*********/
+    /*########Profiler run for memmove using DMA on KL25Z#################*/
     /*********************************************************************/
 	/*needed variables for the program*/
 	uint32_t memmove_dma_kl25z_count_10 = 0;
@@ -71,11 +72,95 @@ void project3(void)
     /*****************End of KL25Z memmove_dma test*********************************/
     /******************************************************************************/
 
+	/*********************************************************************/
+    /*#################Profiler run for my_memset on KL25Z###############*/
+	/*********************************************************************/
+	/*needed variables for the program*/
+	uint32_t my_memset_kl25z_count_10 = 0;
+    uint32_t my_memset_kl25z_count_100 = 0;
+    uint32_t my_memset_kl25z_count_1000 = 0;
+    //uint32_t my_memset_kl25z_count_5000 = 0;
 
+    /*profiler code to run the analysis on the memset_dma using systick timer*/
+    /*using 8-bit conversion (the number of conversions are listed as variables)*/
+    my_memset_kl25z_count_10 = profiler_my_memset_kl25z(MEM_LEN_10);
+    my_memset_kl25z_count_100 = profiler_my_memset_kl25z(MEM_LEN_100);
+    my_memset_kl25z_count_1000 = profiler_my_memset_kl25z(MEM_LEN_1000);
+    /*5000 will not run because linker is not allowing changes*/
+    //my_memset_kl25z_count_5000 = profiler_my_memset_kl25z(MEM_LEN_5000);
+    /******************************************************************************/
+    /*****************End of KL25Z my_memset test*********************************/
+    /******************************************************************************/
+
+	/*********************************************************************/
+    /*################Profiler run for my_memmove on KL25Z###############*/
+	/*********************************************************************/
+	/*needed variables for the program*/
+	uint32_t my_memmove_kl25z_count_10 = 0;
+    uint32_t my_memmove_kl25z_count_100 = 0;
+    uint32_t my_memmove_kl25z_count_1000 = 0;
+    //uint32_t my_memmove_kl25z_count_5000 = 0;
+
+    /*profiler code to run the analysis on the memset_dma using systick timer*/
+    /*using 8-bit conversion (the number of conversions are listed as variables)*/
+    my_memmove_kl25z_count_10 = profiler_my_memmove_kl25z(MEM_LEN_10);
+    my_memmove_kl25z_count_100 = profiler_my_memmove_kl25z(MEM_LEN_100);
+    my_memmove_kl25z_count_1000 = profiler_my_memmove_kl25z(MEM_LEN_1000);
+    /*5000 will not run because linker is not allowing changes*/
+    //my_memmove_kl25z_count_5000 = profiler_my_memmove_kl25z(MEM_LEN_5000);
+    /******************************************************************************/
+    /*****************End of KL25Z my_memset test*********************************/
+    /******************************************************************************/
+
+	/*********************************************************************/
+    /*#############Profiler run for stdlib memmove on KL25Z##############*/
+	/*********************************************************************/
+	/*needed variables for the program*/
+	uint32_t memmove_kl25z_count_10 = 0;
+    uint32_t memmove_kl25z_count_100 = 0;
+    uint32_t memmove_kl25z_count_1000 = 0;
+    //uint32_t memmove_kl25z_count_5000 = 0;
+
+    /*profiler code to run the analysis on the memset_dma using systick timer*/
+    /*using 8-bit conversion (the number of conversions are listed as variables)*/
+    memmove_kl25z_count_10 = profiler_stdlib_memmove_kl25z(MEM_LEN_10);
+    memmove_kl25z_count_100 = profiler_stdlib_memmove_kl25z(MEM_LEN_100);
+    memmove_kl25z_count_1000 = profiler_stdlib_memmove_kl25z(MEM_LEN_1000);
+    /*5000 will not run because linker is not allowing changes*/
+    //memmove_kl25z_count_5000 = profiler_stdlib_memmove_kl25z(MEM_LEN_5000);
+    /******************************************************************************/
+    /*****************End of KL25Z my_memset test*********************************/
+    /******************************************************************************/
+
+	/*********************************************************************/
+    /*#############Profiler run for stdlib memset on KL25Z###############*/
+	/*********************************************************************/
+	/*needed variables for the program*/
+	uint32_t memset_kl25z_count_10 = 0;
+    uint32_t memset_kl25z_count_100 = 0;
+    uint32_t memset_kl25z_count_1000 = 0;
+    //uint32_t memset_kl25z_count_5000 = 0;
+
+    /*profiler code to run the analysis on the memset_dma using systick timer*/
+    /*using 8-bit conversion (the number of conversions are listed as variables)*/
+    memset_kl25z_count_10 = profiler_stdlib_memset_kl25z(MEM_LEN_10);
+    memset_kl25z_count_100 = profiler_stdlib_memset_kl25z(MEM_LEN_100);
+    memset_kl25z_count_1000 = profiler_stdlib_memset_kl25z(MEM_LEN_1000);
+    /*5000 will not run because linker is not allowing changes*/
+    //memset_kl25z_count_5000 = profiler_stdlib_memset_kl25z(MEM_LEN_5000);
+    /******************************************************************************/
+    /*****************End of KL25Z my_memset test*********************************/
+    /******************************************************************************/
+
+    /*Variable usable so compiler doesn't output an error*/
     while(memset_dma_kl25z_count_10 || memset_dma_kl25z_count_100 || memset_dma_kl25z_count_1000 ){};
     while(memset_dma_kl25z_count_10_32bit){};
     while(memmove_dma_kl25z_count_10 || memmove_dma_kl25z_count_100 || memmove_dma_kl25z_count_1000 ){};
     while(memmove_dma_kl25z_count_10_32bit){};
+    while(my_memset_kl25z_count_10 || my_memset_kl25z_count_100 || my_memset_kl25z_count_1000 ){};
+    while(my_memmove_kl25z_count_10 || my_memmove_kl25z_count_100 || my_memmove_kl25z_count_1000 ){};
+    while(memmove_kl25z_count_10 || memmove_kl25z_count_100 || memmove_kl25z_count_1000 ){};
+    while(memset_kl25z_count_10 || memset_kl25z_count_100 || memset_kl25z_count_1000 ){};
 
     #endif /*KL25Z_PRO*/
 

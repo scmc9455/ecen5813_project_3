@@ -90,6 +90,50 @@ uint32_t profiler_memset_dma_kl25z(uint32_t memset_test_len, uint8_t memset_type
 
 uint32_t profiler_memmove_dma_kl25z(uint32_t memmove_test_len, uint8_t memmove_type);
 
+/*********************************************************************************************/
+/****************************profiler_my_memset_kl25z********************************************/
+/**********************************************************************************************
+@brief - This function is the main code that will analyze the time it take to run my_mem functions
+
+@param - memset_test_len: length of bytes of the test
+@return - counter: returned value of the number of cycles
+**********************************************************************************************/
+
+uint32_t profiler_my_memset_kl25z(uint32_t memset_test_len);
+
+/*********************************************************************************************/
+/****************************profiler_my_memmove_kl25z****************************************/
+/**********************************************************************************************
+@brief - This function is the main code that will analyze the time it take to run my_mem functions
+
+@param - memset_test_len: length of bytes of the test
+@return - counter: returned value of the number of cycles
+**********************************************************************************************/
+
+uint32_t profiler_my_memmove_kl25z(uint32_t memmove_test_len);
+
+/*********************************************************************************************/
+/****************************profiler_memmove_kl25z_standard**********************************/
+/**********************************************************************************************
+@brief - This function is the main code that will analyze the time it take to run my_mem functions
+
+@param - memset_test_len: length of bytes of the test
+@return - counter: returned value of the number of cycles
+**********************************************************************************************/
+
+uint32_t profiler_stdlib_memmove_kl25z(uint32_t memmove_test_len);
+
+/*********************************************************************************************/
+/*************************profiler_stdlib_memset_kl25z****************************************/
+/**********************************************************************************************
+@brief - This function is the main code that will analyze the time it take to run my_mem functions
+
+@param - memset_test_len: length of bytes of the test
+@return - counter: returned value of the number of cycles
+**********************************************************************************************/
+
+uint32_t profiler_stdlib_memset_kl25z(uint32_t memset_test_len);
+
 #endif /*__MEM_PROFILER__KL25Z_H__*/
 
 /********************************************************************************************/

@@ -42,7 +42,7 @@ destination is overlapping.
 @return - dst: destination address
 **********************************************************************************************/
 
-uint8_t  *my_memmove(uint8_t *src, uint8_t *dst, size_t length)
+uint8_t  *my_memmove(uint8_t *src, uint8_t *dst, uint32_t length)
 {
     /* Check to see if pointer were passed properly */
     /* if pointer were not properly passed then the function returns a NULL */
@@ -52,7 +52,7 @@ uint8_t  *my_memmove(uint8_t *src, uint8_t *dst, size_t length)
     }
                
     uint8_t *temp_store_loc= (uint8_t *)malloc(length);       
-    uint8_t var_len = 0;      
+    uint32_t var_len = 0;
   
     /* This section of function copies the source contents to the 
     variable location to avoid corruption */
@@ -124,7 +124,7 @@ the value that is passed on a function call is put into the destinaion address
 @param - value: value of data
 @return -  src: source address
 **********************************************************************************************/
-uint8_t  *my_memset(uint8_t *src, size_t length, uint8_t value)
+uint8_t  *my_memset(uint8_t *src, uint32_t length, uint8_t value)
 {
     /* Check to see if pointer were passed properly */
     /* if pointer were not properly passed then the function returns a NULL */
@@ -133,7 +133,7 @@ uint8_t  *my_memset(uint8_t *src, size_t length, uint8_t value)
         return NULL;  
     }
     
-    uint8_t var_len = 0;
+    uint32_t var_len = 0;
     /* Load the value into the memory with the pointer */	
     while(var_len < length)
     {
@@ -263,3 +263,4 @@ uint8_t free_words(void *src)
 /*********************************************************************************************/
 /*****************************End of File*****************************************************/
 /*********************************************************************************************/
+

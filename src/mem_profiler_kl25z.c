@@ -15,6 +15,8 @@ Created for ECEN5813
 
 #include "mem_profiler_kl25z.h"
 
+#include <string.h>
+
 uint8_t wait_state = 0;
 
 /*********************************************************************************************/
@@ -143,7 +145,6 @@ uint32_t profiler_memmove_dma_kl25z(uint32_t memmove_test_len, uint8_t memmove_t
     {
     	/*Load the allocated memory with an arbitrary value to move*/
         *(src_memmove_ptr + i*(memmove_type/8)) = 0x25;
-
     }
 
     /*Calibrate the start and end for timer so it can be subtracted out*/
@@ -177,6 +178,212 @@ uint32_t profiler_memmove_dma_kl25z(uint32_t memmove_test_len, uint8_t memmove_t
 }
 
 /*********************************************************************************************/
+/****************************profiler_my_memset_kl25z********************************************/
+/**********************************************************************************************
+@brief - This function is the main code that will analyze the time it take to run my_mem functions
+
+@param - memset_test_len: length of bytes of the test
+@return - counter: returned value of the number of cycles
+**********************************************************************************************/
+
+uint32_t profiler_my_memset_kl25z(uint32_t memset_test_len)
+{
+    /*necessary variables to run the profiler*/
+    uint32_t count_cal = 0, count = 0;
+    uint8_t *dst_memset_ptr = NULL;
+    /*reverse block of memory to be set*/
+    dst_memset_ptr = reserve_words(memset_test_len);
+    /*Depending on the input type the pointers will have to be casted differently*/
+
+    /*Calibrate the start and end for timer so it can be subtracted out*/
+    systick_init();
+    systick_start(); /*start timer*/
+    systick_end();  /*stop timer*/
+    /*Use the count value to calibrate the timing in and out of the functions*/
+    count_cal = (TIMER_MAX - __SYST_CVR); /*Count value of systick timer*/
+
+    systick_init(); /*Init the systick*/
+    /*Start the systick timer*/
+    systick_start();
+    /*run the memset function to be tested*/
+    my_memset(dst_memset_ptr, memset_test_len, MEMSET_VALUE);
+    /*Start the systick timer*/
+    systick_end();
+    /*Record the amount that it took to run the memset*/
+    if(COUNT_FLAG == 1)
+    {
+        /*count rolled over so need to add max value times the number of times*/
+    	count = ((TIMER_MAX) + (TIMER_MAX - __SYST_CVR));
+    }else{
+        count = (TIMER_MAX - __SYST_CVR); /*Count value of systick timer*/
+    }
+    /*Remove the calibration from the calculation to address function push and pop*/
+    count -= count_cal; /*give the number of cycles it took to run the DMA testing*/
+    /*Free allocated space from running code*/
+    free_words(dst_memset_ptr);
+
+    return count;
+}
+
+/*********************************************************************************************/
+/****************************profiler_my_memmove_kl25z****************************************/
+/**********************************************************************************************
+@brief - This function is the main code that will analyze the time it take to run my_mem functions
+
+@param - memset_test_len: length of bytes of the test
+@return - counter: returned value of the number of cycles
+**********************************************************************************************/
+
+uint32_t profiler_my_memmove_kl25z(uint32_t memmove_test_len)
+{
+    /*necessary variables to run the profiler*/
+    uint32_t count_cal = 0, count = 0;
+    uint8_t *src_memmove_ptr = NULL;
+    uint8_t *dst_memmove_ptr = NULL;
+    /*reverse block of memory to be moved*/
+    src_memmove_ptr = reserve_words(memmove_test_len);
+    dst_memmove_ptr = reserve_words(memmove_test_len);
+    /*Fill the source address memory using for loop and dependent on the type*/
+    for(uint32_t i=0; i<(memmove_test_len) ; i++)
+    {
+    	/*Load the allocated memory with an arbitrary value to move*/
+        *(src_memmove_ptr + i) = 0xA5;
+    }
+
+    /*Calibrate the start and end for timer so it can be subtracted out*/
+    systick_init();
+    systick_start(); /*start timer*/
+    systick_end();  /*stop timer*/
+    /*Use the count value to calibrate the timing in and out of the functions*/
+    count_cal = (TIMER_MAX - __SYST_CVR); /*Count value of systick timer*/
+
+    systick_init(); /*Init the systick*/
+    /*Start the systick timer*/
+    systick_start();
+    my_memmove(src_memmove_ptr, dst_memmove_ptr, memmove_test_len);
+    /*Stop the systick timer*/
+    systick_end();
+    /*Record the amount that it took to run the memset*/
+    if(COUNT_FLAG == 1)
+    {
+        /*count rolled over so need to add max value times the number of times*/
+    	count = ((TIMER_MAX) + (TIMER_MAX - __SYST_CVR));
+    }else{
+        count = (TIMER_MAX - __SYST_CVR); /*Count value of systick timer*/
+    }
+    /*Remove the calibration from the calculation to address function push and pop*/
+    count -= count_cal; /*give the number of cycles it took to run the DMA testing*/
+    /*Free allocated space from running code*/
+    free_words(dst_memmove_ptr);
+    free_words(src_memmove_ptr);
+
+    return count;
+}
+
+/*********************************************************************************************/
+/****************************profiler_memmove_kl25z_standard**********************************/
+/**********************************************************************************************
+@brief - This function is the main code that will analyze memmove standard lib functions
+
+@param - memset_test_len: length of bytes of the test
+@return - counter: returned value of the number of cycles
+**********************************************************************************************/
+
+uint32_t profiler_stdlib_memmove_kl25z(uint32_t memmove_test_len)
+{
+    /*necessary variables to run the profiler*/
+    uint32_t count_cal = 0, count = 0;
+    uint8_t *src_memmove_ptr = NULL;
+    uint8_t *dst_memmove_ptr = NULL;
+    /*reverse block of memory to be moved*/
+    src_memmove_ptr = reserve_words(memmove_test_len);
+    dst_memmove_ptr = reserve_words(memmove_test_len);
+    /*Fill the source address memory using for loop and dependent on the type*/
+    for(uint32_t i=0; i<(memmove_test_len) ; i++)
+    {
+    	/*Load the allocated memory with an arbitrary value to move*/
+        *(src_memmove_ptr + i) = 0xA5;
+    }
+
+    /*Calibrate the start and end for timer so it can be subtracted out*/
+    systick_init();
+    systick_start(); /*start timer*/
+    systick_end();  /*stop timer*/
+    /*Use the count value to calibrate the timing in and out of the functions*/
+    count_cal = (TIMER_MAX - __SYST_CVR); /*Count value of systick timer*/
+
+    systick_init(); /*Init the systick*/
+    /*Start the systick timer*/
+    systick_start();
+    /*Run the standard lib memmove functions*/
+    memmove(dst_memmove_ptr, src_memmove_ptr, memmove_test_len);
+    /*Stop the systick timer*/
+    systick_end();
+    /*Record the amount that it took to run the memset*/
+    if(COUNT_FLAG == 1)
+    {
+        /*count rolled over so need to add max value times the number of times*/
+    	count = ((TIMER_MAX) + (TIMER_MAX - __SYST_CVR));
+    }else{
+        count = (TIMER_MAX - __SYST_CVR); /*Count value of systick timer*/
+    }
+    /*Remove the calibration from the calculation to address function push and pop*/
+    count -= count_cal; /*give the number of cycles it took to run the DMA testing*/
+    /*Free allocated space from running code*/
+    free_words(dst_memmove_ptr);
+    free_words(src_memmove_ptr);
+
+    return count;
+}
+
+/*********************************************************************************************/
+/************************profiler_stdlib_memset_kl25z*****************************************/
+/**********************************************************************************************
+@brief - This function is the main code that will analyze the memset functions in stdlib
+
+@param - memset_test_len: length of bytes of the test
+@return - counter: returned value of the number of cycles
+**********************************************************************************************/
+
+uint32_t profiler_stdlib_memset_kl25z(uint32_t memset_test_len)
+{
+    /*necessary variables to run the profiler*/
+    uint32_t count_cal = 0, count = 0;
+    uint8_t *dst_memset_ptr = NULL;
+    /*reverse block of memory to be set*/
+    dst_memset_ptr = reserve_words(memset_test_len);
+    /*Depending on the input type the pointers will have to be casted differently*/
+
+    /*Calibrate the start and end for timer so it can be subtracted out*/
+    systick_init();
+    systick_start(); /*start timer*/
+    systick_end();  /*stop timer*/
+    /*Use the count value to calibrate the timing in and out of the functions*/
+    count_cal = (TIMER_MAX - __SYST_CVR); /*Count value of systick timer*/
+
+    systick_init(); /*Init the systick*/
+    /*Start the systick timer*/
+    systick_start();
+    /*run the memset function to be tested*/
+    memset(dst_memset_ptr, MEMSET_VALUE, memset_test_len);
+    /*Start the systick timer*/
+    systick_end();
+    /*Record the amount that it took to run the memset*/
+    if(COUNT_FLAG == 1)
+    {
+        /*count rolled over so need to add max value times the number of times*/
+    	count = ((TIMER_MAX) + (TIMER_MAX - __SYST_CVR));
+    }else{
+        count = (TIMER_MAX - __SYST_CVR); /*Count value of systick timer*/
+    }
+    /*Remove the calibration from the calculation to address function push and pop*/
+    count -= count_cal; /*give the number of cycles it took to run the DMA testing*/
+    /*Free allocated space from running code*/
+    free_words(dst_memset_ptr);
+
+    return count;
+}
+
+/*********************************************************************************************/
 /*****************************End of File*****************************************************/
 /*********************************************************************************************/
-

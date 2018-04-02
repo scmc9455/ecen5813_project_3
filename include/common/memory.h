@@ -45,7 +45,7 @@ destination is overlapping.
 @return - dst: destination address
 ********************************************************************************************/
 
-uint8_t *my_memmove(uint8_t *src, uint8_t *dst, size_t length);
+uint8_t *my_memmove(uint8_t *src, uint8_t *dst, uint32_t length);
 
 /********************************************************************************************
 @brief - this is a memory coping function from one location to another
@@ -74,7 +74,7 @@ the value that is passed on a function call is put into the destinaion address
 @return -  src: source address
 **********************************************************************************************/
 
-uint8_t *my_memset(uint8_t *src, size_t length, uint8_t value);
+uint8_t *my_memset(uint8_t *src, uint32_t length, uint8_t value);
 
 /**********************************************************************************************
 @brief- This function zeros out a block of memory

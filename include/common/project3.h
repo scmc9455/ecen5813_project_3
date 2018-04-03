@@ -2,6 +2,11 @@
 @file - project3.h
 @brief - project3.h file is the header file for the project3 testing functionality
 
+This file runs that required programs for project 3 including the memory profiler
+and the SPI communication commands
+Functions Include
+1. project3
+
 @author - Scott McElroy
 
 @date - March 31, 2018
@@ -12,8 +17,21 @@ Created for ECEN5813
 #ifndef __PROJECT3_H__
 #define __PROJECT3_H__
 
+#ifdef KL25Z_PRO
 #include "dma.h"
 #include "mem_profiler_kl25z.h"
+#endif
+
+#ifdef KL25Z
+#include "dma.h"
+#endif
+
+#if defined (BBB_PRO) || defined (HOST)
+#include "mem_profiler_bbb.h"
+#include <stdio.h>
+#endif
+
+#include <stdint.h>
 
 /*Memset Testing defines*/
 #define MEM_LEN_10         (10)

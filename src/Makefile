@@ -5,7 +5,7 @@
 #
 #@author - Scott McElroy
 #
-#@data - March 31, 2018
+#@data - April 3rd, 2018
 #
 #**************************************************************************#
 
@@ -44,13 +44,16 @@ else ifeq ($(PLATFORM),BBB)
 CC = arm-linux-gnueabi-gcc
 CFLAGS = $(GENFLAGS) -DVERBOSE
 INCLUDES = -I./../include/common \
--I./../include/CMSIS
+
+else ifeq ($(PLATFORM),BBB_PRO)
+CC = arm-linux-gnueabi-gcc
+CFLAGS = $(GENFLAGS) -DVERBOSE
+INCLUDES = -I./../include/common \
 
 else ifeq ($(PLATFORM),HOST)
 CC = gcc
 CFLAGS = $(GENFLAGS) -DVERBOSE
 INCLUDES:= -I./../include/common \
--I./../include/CMSIS
 
 #added a make line to do unit testing
 else ifeq ($(PLATFORM),CMOCKA)
@@ -65,8 +68,7 @@ else
 CC= gcc
 CFLAG = $(GENFLAGS) -DVERBOSE
 CPPFLAGS = -DHOST
-INCLUDES:= -I./../include/common \
--I./../include/CMSIS
+INCLUDES:= -I./../include/common
 
 endif	
 

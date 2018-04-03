@@ -5,6 +5,16 @@
 
 This file will be used to profile the memory of the KL25Z.
 The functions include the generation of a statics file and running of the profiler
+Functions included are
+1. systick_init
+2. systick_start
+3. systick_end
+4. profiler_memset_dma_kl25z
+5. profiler_memmove_dma_kl25z
+6. profiler_my_memset_kl25z
+7. profiler_my_memmove_kl25z
+8. profiler_stdlib_memmove_kl25z
+9. profiler_stdlib_memset_kl25z
 
 @author - Scott McElroy
 
@@ -31,7 +41,7 @@ uint8_t wait_state = 0;
 void systick_init(void)
 {
     /*Configure the SysTick Timer to be from the processor clock*/
-	__SYST_CSR |= (TICK_CLKSOURCE);
+    __SYST_CSR |= (TICK_CLKSOURCE);
     /*Set the timer to 0 and compare to max*/
     __SYST_RVR |= TIMER_MAX;
     __SYST_CVR |= 0;

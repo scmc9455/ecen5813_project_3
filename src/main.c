@@ -23,12 +23,21 @@ Created for ECEN5813
 
 #ifdef PROJECT3
 #include "project3.h"
+#include <stdio.h>
 #endif
 
+#ifdef KL25Z
 #include "MKL25Z4.h"
+#endif
+
+#ifdef KL25Z_PRO
+#include "MKL25Z4.h"
+#endif
 
 int main(void)
 {
+    printf("test");
+
     uint32_t run=1;
     #ifdef PROJECT1
         project1();
@@ -39,10 +48,13 @@ int main(void)
     #endif
 
     #ifdef PROJECT3
+    printf("test");
         project3();
     #endif
 
     while(run){};    
+
+    return 0;
 }
 
 /*********************************************************************************************/

@@ -5,6 +5,8 @@
 
 This file runs that required programs for project 3 including the memory profiler
 and the SPI communication commands
+Functions Include
+1. project3
 
 @author - Scott McElroy
 
@@ -27,11 +29,11 @@ Created for ECEN5813
 void project3(void)
 {
     #ifdef KL25Z_PRO
-	/*********************************************************************/
+    /*********************************************************************/
     /*##########Profiler run for memset using DMA on KL25Z###############*/
-	/*********************************************************************/
-	/*needed variables for the program*/
-	uint32_t memset_dma_kl25z_count_10 = 0;
+    /*********************************************************************/
+    /*needed variables for the program*/
+    uint32_t memset_dma_kl25z_count_10 = 0;
     uint32_t memset_dma_kl25z_count_10_32bit = 0;
     uint32_t memset_dma_kl25z_count_100 = 0;
     uint32_t memset_dma_kl25z_count_1000 = 0;
@@ -52,8 +54,8 @@ void project3(void)
     /**********************************************************************/
     /*########Profiler run for memmove using DMA on KL25Z#################*/
     /*********************************************************************/
-	/*needed variables for the program*/
-	uint32_t memmove_dma_kl25z_count_10 = 0;
+    /*needed variables for the program*/
+    uint32_t memmove_dma_kl25z_count_10 = 0;
     uint32_t memmove_dma_kl25z_count_10_32bit = 0;
     uint32_t memmove_dma_kl25z_count_100 = 0;
     uint32_t memmove_dma_kl25z_count_1000 = 0;
@@ -72,11 +74,11 @@ void project3(void)
     /*****************End of KL25Z memmove_dma test*********************************/
     /******************************************************************************/
 
-	/*********************************************************************/
+    /*********************************************************************/
     /*#################Profiler run for my_memset on KL25Z###############*/
-	/*********************************************************************/
-	/*needed variables for the program*/
-	uint32_t my_memset_kl25z_count_10 = 0;
+    /*********************************************************************/
+    /*needed variables for the program*/
+    uint32_t my_memset_kl25z_count_10 = 0;
     uint32_t my_memset_kl25z_count_100 = 0;
     uint32_t my_memset_kl25z_count_1000 = 0;
     //uint32_t my_memset_kl25z_count_5000 = 0;
@@ -92,11 +94,11 @@ void project3(void)
     /*****************End of KL25Z my_memset test*********************************/
     /******************************************************************************/
 
-	/*********************************************************************/
+    /*********************************************************************/
     /*################Profiler run for my_memmove on KL25Z###############*/
-	/*********************************************************************/
-	/*needed variables for the program*/
-	uint32_t my_memmove_kl25z_count_10 = 0;
+    /*********************************************************************/
+    /*needed variables for the program*/
+    uint32_t my_memmove_kl25z_count_10 = 0;
     uint32_t my_memmove_kl25z_count_100 = 0;
     uint32_t my_memmove_kl25z_count_1000 = 0;
     //uint32_t my_memmove_kl25z_count_5000 = 0;
@@ -112,11 +114,11 @@ void project3(void)
     /*****************End of KL25Z my_memset test*********************************/
     /******************************************************************************/
 
-	/*********************************************************************/
+    /*********************************************************************/
     /*#############Profiler run for stdlib memmove on KL25Z##############*/
-	/*********************************************************************/
-	/*needed variables for the program*/
-	uint32_t memmove_kl25z_count_10 = 0;
+    /*********************************************************************/
+    /*needed variables for the program*/
+    uint32_t memmove_kl25z_count_10 = 0;
     uint32_t memmove_kl25z_count_100 = 0;
     uint32_t memmove_kl25z_count_1000 = 0;
     //uint32_t memmove_kl25z_count_5000 = 0;
@@ -132,11 +134,11 @@ void project3(void)
     /*****************End of KL25Z my_memset test*********************************/
     /******************************************************************************/
 
-	/*********************************************************************/
+    /*********************************************************************/
     /*#############Profiler run for stdlib memset on KL25Z###############*/
-	/*********************************************************************/
-	/*needed variables for the program*/
-	uint32_t memset_kl25z_count_10 = 0;
+    /*********************************************************************/
+    /*needed variables for the program*/
+    uint32_t memset_kl25z_count_10 = 0;
     uint32_t memset_kl25z_count_100 = 0;
     uint32_t memset_kl25z_count_1000 = 0;
     //uint32_t memset_kl25z_count_5000 = 0;
@@ -152,7 +154,7 @@ void project3(void)
     /*****************End of KL25Z my_memset test*********************************/
     /******************************************************************************/
 
-    /*Variable usable so compiler doesn't output an error*/
+    /*Variable usage so compiler doesn't output an error*/
     while(memset_dma_kl25z_count_10 || memset_dma_kl25z_count_100 || memset_dma_kl25z_count_1000 ){};
     while(memset_dma_kl25z_count_10_32bit){};
     while(memmove_dma_kl25z_count_10 || memmove_dma_kl25z_count_100 || memmove_dma_kl25z_count_1000 ){};
@@ -163,6 +165,73 @@ void project3(void)
     while(memset_kl25z_count_10 || memset_kl25z_count_100 || memset_kl25z_count_1000 ){};
 
     #endif /*KL25Z_PRO*/
+
+    /******************************************************************************/
+    /******************************************************************************/
+    /******************************************************************************/
+
+    #if defined (BBB_PRO) || defined (HOST) 
+    /*********************************************************************/
+    /*#############Profiler run for my_memset on BBB#####################*/
+    /*********************************************************************/
+    printf("Running my_memset with len 10\n");
+    profiler_my_memset_bbb(MEM_LEN_10);
+    printf("Running my_memset with len 100\n");
+    profiler_my_memset_bbb(MEM_LEN_100);
+    printf("Running my_memset with len 1000\n");
+    profiler_my_memset_bbb(MEM_LEN_1000);
+    printf("Running my_memset with len 5000\n");
+    profiler_my_memset_bbb(MEM_LEN_5000);
+    /******************************************************************************/
+    /********************End of BBB my_memset test*********************************/
+    /******************************************************************************/
+
+    /*********************************************************************/
+    /*#############Profiler run for my_memmove on BBB#####################*/
+    /*********************************************************************/
+    printf("Running my_memmove with len 10\n");
+    profiler_my_memmove_bbb(MEM_LEN_10);
+    printf("Running my_memmove with len 100\n");
+    profiler_my_memmove_bbb(MEM_LEN_100);
+    printf("Running my_memmove with len 1000\n");
+    profiler_my_memmove_bbb(MEM_LEN_1000);
+    printf("Running my_memmove with len 5000\n");
+    profiler_my_memmove_bbb(MEM_LEN_5000);
+    /******************************************************************************/
+    /********************End of BBB my_memmove test********************************/
+    /******************************************************************************/
+
+    /*********************************************************************/
+    /*#########Profiler run for stlib_memmove on BBB#####################*/
+    /*********************************************************************/
+    printf("Running stdlib_memmove with len 10\n");
+    profiler_stdlib_memmove_bbb(MEM_LEN_10);
+    printf("Running stdlib_memmove with len 100\n");
+    profiler_stdlib_memmove_bbb(MEM_LEN_100);
+    printf("Running stdlib_memmove with len 1000\n");
+    profiler_stdlib_memmove_bbb(MEM_LEN_1000);
+    printf("Running stdlib_memmove with len 5000\n");
+    profiler_stdlib_memmove_bbb(MEM_LEN_5000);
+    /******************************************************************************/
+    /****************End of BBB stdlib_memmove test*******************************/
+    /******************************************************************************/
+
+    /*********************************************************************/
+    /*#########Profiler run for stlib_memset on BBB#####################*/
+    /*********************************************************************/
+    printf("Running stdlib_memset with len 10\n");
+    profiler_stdlib_memset_bbb(MEM_LEN_10);
+    printf("Running stdlib_memset with len 100\n");
+    profiler_stdlib_memset_bbb(MEM_LEN_100);
+    printf("Running stdlib_memset with len 1000\n");
+    profiler_stdlib_memmove_bbb(MEM_LEN_1000);
+    printf("Running stdlib_memset with len 5000\n");
+    profiler_stdlib_memset_bbb(MEM_LEN_5000);
+    /******************************************************************************/
+    /****************End of BBB stdlib_memset test*******************************/
+    /******************************************************************************/
+
+    #endif /*BBB_PRO || HOST*/
 
     return;
 }

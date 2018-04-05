@@ -1,0 +1,132 @@
+/*********************************************************************************************
+@file - statistics.txt
+
+@brief - This file presents the statistics of the profiler for memory manipulation functions
+
+This file contains the following items
+1. Comparisons of the following of the non-DMA memory functions
+    a. my_memmove between FDRM and BBB/HOST
+    b. my_memset between FDRM and BBB/HOST
+    c. memmove (library)between FDRM and BBB/HOST
+    d. memset (library)between FDRM and BBB/HOST
+2. The time in clock ticks of the DMA on KL25Z
+3. The time comparison of the 8bit vs. 32bit transfers
+4. Comments of whether my_memmove/my_memset are different then alternative functions
+
+@author - Scott McElroy
+
+@date - April 4st, 2018
+
+Created for ECEN5813
+**********************************************************************************************/
+
+1.COMPARISONS
+*****************************************
+*****************************************
+A. MY_MEMMOVE COMPARISONS (in cycle/ticks)
+*****WITH High Optimization (-O3)********
+NUMBER OF BYTES   10  100 1000  5000
+. FDRM =         680 5364 52265  N/A 
+. HOST =           6   1    2    2
+. BBB =            0   0    0    0
+*****WITH Low Optimization (-O0)********
+NUMBER OF BYTES   10  100  1000  5000
+. FDRM =         680  5364 52265 N/A
+. HOST =          3    2    6     15
+. BBB =           0    0    0     0
+*****************************************
+*****************************************
+B. MY_MEMSET COMPARISONS (in cycle/ticks)
+*****WITH High Optimization (-O3)********
+NUMBER OF BYTES  10  100 1000  5000
+. FDRM =        242 2251 22051  N/A 
+. HOST =          6   1    2     2
+. BBB =           0   0    0     0
+*****WITH Low Optimization (-O0)********
+NUMBER OF BYTES   10  100 1000  5000
+. FDRM =         242 2251 22051 N/A
+. HOST =          3    2   6     15
+. BBB =           0    0   0     0
+*****************************************
+*****************************************
+C. STDLIB_MEMMOVE COMPARISONS (in cycle/ticks)
+*****WITH High Optimization (-O3)********
+NUMBER OF BYTES   10 100 1000 5000
+. FDRM =         125 935 9040 N/A
+. HOST =          2   2   2    2
+. BBB =           0   0   0    0
+*****WITH Low Optimization (-O0)********
+NUMBER OF BYTES   10  100 1000 5000
+. FDRM =         125  935 9040  N/A
+. HOST =          5    2   2    2
+. BBB =           0    0   0    0
+*****************************************
+*****************************************
+D. STDLIB_MEMSET COMPARISONS (in cycle/ticks)
+*****WITH High Optimization (-O3)********
+NUMBER OF BYTES  10 100 1000 5000
+. FDRM =         89 719 7019 N/A 
+. HOST =          2   1   1    1
+. BBB =           0   0   0    0
+*****WITH Low Optimization (-O0)********
+NUMBER OF BYTES   10  100 1000 5000
+. FDRM =          89  719 7019 N/A
+. HOST =          11   3   4    4 
+. BBB =           0    0   0    0
+
+*****************************************
+*****************************************
+*****************************************
+*****************************************
+2. Time in Clock Ticks for the DMA on KL25Z
+DMA_MEMSET COMPARISONS (in cycle/ticks)
+*****WITH High Optimization (-O3)********
+NUMBER OF BYTES  10 100 1000 5000
+. FDRM =         59 202 2002 N/A   
+*****WITH Low Optimization (-O0)********
+NUMBER OF BYTES  10  100 1000 5000
+. FDRM =         59  202 2002 N/A
+
+DMA_MEMMOVE COMPARISONS (in cycle/ticks)
+*****WITH High Optimization (-O3)********
+NUMBER OF BYTES  10 100 1000 5000
+. FDRM =         25  205  469 N/A  
+*****WITH Low Optimization (-O0)********
+NUMBER OF BYTES  10  100 1000 5000
+. FDRM =         25  205  469 N/A
+
+
+*****************************************
+*****************************************
+*****************************************
+*****************************************
+3. Comparsion of 8bit vs. 32bit transfers on KL25Z
+D. DMA_MEMSET COMPARISONS (in cycle/ticks)
+*****WITH High Optimization (-O3)********
+NUMBER OF BYTES 10: 8bit 32bit
+. FDRM =            59   32
+*****WITH Low Optimization (-O0)********
+NUMBER OF BYTES 10: 8bit 32bit
+. FDRM =            59   32
+
+Comments: The 32 bit transfers always seem to
+run with less clock ticks.
+The assumptions is that the transfer uses the 32bit
+bus full width for the transfer when configured as 32bit.
+In the 8bit transfer only 8bit are transfered each time.
+
+*****************************************
+*****************************************
+*****************************************
+*****************************************
+4. Comments: On speed of the transfers
+a. The my_memmove and my_memset run significanty slower
+then the built in functions of memmove and memset or even the DMA.
+b. The DMA function on the KL25Z appears to run quicker then 
+even the standard library functions that are built into the compiler.
+
+
+
+
+
+

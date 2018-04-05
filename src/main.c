@@ -34,11 +34,10 @@ Created for ECEN5813
 #include "MKL25Z4.h"
 #endif
 
+#include <stdint.h>
+
 int main(void)
 {
-    printf("test");
-
-    uint32_t run=1;
     #ifdef PROJECT1
         project1();
     #endif
@@ -48,11 +47,8 @@ int main(void)
     #endif
 
     #ifdef PROJECT3
-    printf("test");
         project3();
-    #endif
-
-    while(run){};    
+    #endif   
 
     return 0;
 }
@@ -60,3 +56,4 @@ int main(void)
 /*********************************************************************************************/
 /**************************************End of File********************************************/
 /*********************************************************************************************/
+

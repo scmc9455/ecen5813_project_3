@@ -12,8 +12,16 @@
 include sources.mk
 
 #***********Variables******
-GENFLAGS:= -Wall -Werror -g -O0 -std=c99
+GENFLAGS:= -Wall -Werror -g -std=c99
 LDFLAGS:= -Wl,-Map=main.map
+
+ifeq ($(OPTI),LOW-OP)
+GENFLAGS += -O0
+else ifeq ($(OPTI),HI-OP)
+GENFLAGS += -O3
+else
+GENFLAGS += -O0
+endif
 
 #**************Switch statements for the platform determination**********
 ifeq ($(PLATFORM),KL25Z)
@@ -21,7 +29,7 @@ CPU = cortex-m0plus
 CC = arm-none-eabi-gcc
 ARCH= armv6-m	
 CFLAGS = $(GENFLAGS) -march=$(ARCH) -mcpu=$(CPU) -mthumb \
--mfloat-abi=soft -mfpu=fpv4-sp-d16 --specs=nosys.specs
+-mfloat-abi=soft -mfpu=fpv4-sp-d16 --specs=nosys.specs -DKL25Z
 INCLUDES = -I./../include/common \
 -I./../include/kl25z \
 -I./../include/CMSIS \
@@ -33,7 +41,7 @@ CPU = cortex-m0plus
 CC = arm-none-eabi-gcc
 ARCH= armv6-m	
 CFLAGS = $(GENFLAGS) -march=$(ARCH) -mcpu=$(CPU) -mthumb \
--mfloat-abi=soft -mfpu=fpv4-sp-d16 --specs=nosys.specs
+-mfloat-abi=soft -mfpu=fpv4-sp-d16 --specs=nosys.specs -DKL25Z_PRO
 INCLUDES = -I./../include/common \
 -I./../include/kl25z \
 -I./../include/CMSIS \
@@ -42,18 +50,18 @@ LDFLAGS += -T ./../platform/MKL25Z128xxx4_flash.ld
 
 else ifeq ($(PLATFORM),BBB)
 CC = arm-linux-gnueabi-gcc
-CFLAGS = $(GENFLAGS) -DVERBOSE
+CFLAGS = $(GENFLAGS) -DVERBOSE -DBBB
 INCLUDES = -I./../include/common \
 
 else ifeq ($(PLATFORM),BBB_PRO)
 CC = arm-linux-gnueabi-gcc
-CFLAGS = $(GENFLAGS) -DVERBOSE
+CFLAGS = $(GENFLAGS) -DVERBOSE -DBBB_PRO
 INCLUDES = -I./../include/common \
 
 else ifeq ($(PLATFORM),HOST)
 CC = gcc
-CFLAGS = $(GENFLAGS) -DVERBOSE
-INCLUDES:= -I./../include/common \
+CFLAGS = $(GENFLAGS) -DVERBOSE -DHOST
+INCLUDES:= -I./../include/common
 
 #added a make line to do unit testing
 else ifeq ($(PLATFORM),CMOCKA)
@@ -67,7 +75,7 @@ INCLUDES:= -I./../include/common \
 else 
 CC= gcc
 CFLAG = $(GENFLAGS) -DVERBOSE
-CPPFLAGS = -DHOST
+CPPFLAGS = #-DHOST
 INCLUDES:= -I./../include/common
 
 endif	
@@ -117,12 +125,25 @@ size:
 	size $(OBJS) $(TARGET)
 
 #**********Command "make upload_BBB"*********************************************
-.PHONY: upload_BBB
-upload_BBB: $(TARGET) LOAD
+.PHONY: upload_BBB_project1
+upload_BBB_project1: clean $(TARGET) LOAD
 
 .PHONY: LOAD
 LOAD: 
 	sudo scp project1.elf root@192.168.7.2:/root/ecen5813_project_1
+
+#***************************
+.PHONY: upload_BBB_project3
+upload_BBB_project3: clean $(TARGET) LOAD3
+
+.PHONY: LOAD3
+LOAD3:
+	sudo scp project3.elf root@192.168.7.2:/root/ecen5813_project_3
+
+#**********Command allows direct connect to BBB************************************
+.PHONY: BBB_connect
+BBB_connect: 
+	ssh root@192.168.7.2
 
 #******This section will generate the assembly files*********************
 %.s:%.c

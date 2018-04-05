@@ -26,7 +26,7 @@ Created for ECEN5813
 #include "dma.h"
 #endif
 
-#if defined (BBB_PRO) || defined (HOST)
+#if defined (HOST) || defined (BBB_PRO)
 #include "mem_profiler_bbb.h"
 #include <stdio.h>
 #endif

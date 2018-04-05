@@ -31,32 +31,27 @@ Created for ECEN5813
 
 void profiler_my_memset_bbb(uint32_t memset_test_len)
 {
-    printf("Test for BBB my_memset with a mem length of = %d \n", memset_test_len);
+    printf("Test for BBB my_memset with a mem length of: %d \n", memset_test_len);
     /*necessary variables to run the profiler*/
     /*Variables need to get the clocking correctly*/
-    clock_t start_t, end_t, cal_t, result_t;
+    clock_t start, end, result;
 
     uint8_t *dst_memset_ptr = NULL;
     /*reverse block of memory to be set*/
     dst_memset_ptr = reserve_words(memset_test_len);
     /*Depending on the input type the pointers will have to be casted differently*/
 
-    /*Calibrate the start and end for timer so it can be subtracted out*/
-    start_t = clock(); /*grab clock timing*/
-    end_t = clock();  /*stop timer*/
-    /*Use the count value to calibrate the timing in and out of the functions*/
-    cal_t = (end_t - start_t); /*Count value of systick timer*/
-    printf("BBB Clock Cal Timing = %ld \n",cal_t); /*Print Cal Results*/
-
     /*Grab the clock time start*/
-    start_t = clock();
+    start = clock();
     /*run the memset function to be tested*/
     my_memset(dst_memset_ptr, memset_test_len, MEMSET_VALUE);
     /*Grab the clock time start*/
-    end_t = clock();
+    end = clock();
+
     /*Record the amount that it took to run the memset plus subtract out the cal value*/
-    result_t = ((end_t - start_t) - cal_t);
-    printf("BBB my_memset runs in = %ld\n\n\n",result_t); /*Print the results of the run out to the terminal*/
+    result = ((end - start));
+    /*Print the results of the run out to the terminal*/
+    printf("BBB my_memset runs in (clock cycles) = %ld\n***************\n\n",result); 
 
     /*Free allocated space from running code*/
     free_words(dst_memset_ptr);
@@ -75,10 +70,10 @@ void profiler_my_memset_bbb(uint32_t memset_test_len)
 
 void profiler_my_memmove_bbb(uint32_t memmove_test_len)
 {
-    printf("Test for BBB my_memmove with a mem length of = %d \n", memmove_test_len);
+    printf("Test for BBB my_memmove with a mem length of: %d \n", memmove_test_len);
     /*necessary variables to run the profiler*/
     /*Variables need to get the clocking correctly*/
-    clock_t start_t, end_t, cal_t, result_t;
+    clock_t start, end, result;
 
     uint8_t *src_memmove_ptr = NULL;
     uint8_t *dst_memmove_ptr = NULL;
@@ -92,22 +87,16 @@ void profiler_my_memmove_bbb(uint32_t memmove_test_len)
         *(src_memmove_ptr + i) = 0xA5;
     }
 
-    /*Calibrate the start and end for timer so it can be subtracted out*/
-    start_t = clock(); /*grab clock timing*/
-    end_t = clock();  /*stop timer*/
-    /*Use the count value to calibrate the timing in and out of the functions*/
-    cal_t = (end_t - start_t); /*Count value of systick timer*/
-    printf("BBB Clock Cal Timing = %ld \n",cal_t); /*Print Cal Results*/
-
     /*Grab the clock time start*/
-    start_t = clock();
+    start = clock();
     /*run the memset function to be tested*/
     my_memmove(src_memmove_ptr, dst_memmove_ptr, memmove_test_len);
    /*Grab the clock time start*/
-    end_t = clock();
+    end = clock();
     /*Record the amount that it took to run the memset plus subtract out the cal value*/
-    result_t = ((end_t - start_t) - cal_t);
-    printf("BBB my_memmove runs in = %ld\n\n\n",result_t); /*Print the results of the run out to the terminal*/
+    result = ((end - start));
+    /*Print the results of the run out to the terminal*/
+    printf("BBB my_memmove runs in = %ld\n************\n\n",result); 
 
     /*Free allocated space from running code*/
     free_words(dst_memmove_ptr);
@@ -127,10 +116,10 @@ void profiler_my_memmove_bbb(uint32_t memmove_test_len)
 
 void profiler_stdlib_memmove_bbb(uint32_t memmove_test_len)
 {
-    printf("Test for BBB stdlib_memmove with a mem length of = %d \n", memmove_test_len);
+    printf("Test for BBB stdlib_memmove with a mem length of: %d \n", memmove_test_len);
     /*necessary variables to run the profiler*/
     /*Variables need to get the clocking correctly*/
-    clock_t start_t, end_t, cal_t, result_t;
+    clock_t start, end, result;
 
     uint8_t *src_memmove_ptr = NULL;
     uint8_t *dst_memmove_ptr = NULL;
@@ -144,22 +133,16 @@ void profiler_stdlib_memmove_bbb(uint32_t memmove_test_len)
         *(src_memmove_ptr + i) = 0xA5;
     }
 
-    /*Calibrate the start and end for timer so it can be subtracted out*/
-    start_t = clock(); /*grab clock timing*/
-    end_t = clock();  /*stop timer*/
-    /*Use the count value to calibrate the timing in and out of the functions*/
-    cal_t = (end_t - start_t); /*Count value of systick timer*/
-    printf("BBB Clock Cal Timing = %ld \n",cal_t); /*Print Cal Results*/
-
     /*Grab the clock time start*/
-    start_t = clock();
+    start = clock();
     /*run the memmove function to be tested*/
     memmove(dst_memmove_ptr, src_memmove_ptr, memmove_test_len);
    /*Grab the clock time start*/
-    end_t = clock();
+    end = clock();
     /*Record the amount that it took to run the memset plus subtract out the cal value*/
-    result_t = ((end_t - start_t) - cal_t);
-    printf("BBB stdlib_memmove runs in = %ld\n\n\n",result_t); /*Print the results of the run out to the terminal*/
+    result = ((end - start));
+    /*Print the results of the run out to the terminal*/
+    printf("BBB stdlib_memmove runs in = %ld\n********************\n\n",result); 
 
     /*Free allocated space from running code*/
     free_words(dst_memmove_ptr);
@@ -180,32 +163,26 @@ void profiler_stdlib_memmove_bbb(uint32_t memmove_test_len)
 
 void profiler_stdlib_memset_bbb(uint32_t memset_test_len)
 {
-   printf("Test for BBB stdlib_memmove with a mem length of = %d \n", memset_test_len);
+   printf("Test for BBB stdlib_memmove with a mem length of: %d \n", memset_test_len);
     /*necessary variables to run the profiler*/
     /*Variables need to get the clocking correctly*/
-    clock_t start_t, end_t, cal_t, result_t;
+    clock_t start, end, result;
 
     uint8_t *dst_memset_ptr = NULL;
     /*reverse block of memory to be set*/
     dst_memset_ptr = reserve_words(memset_test_len);
     /*Depending on the input type the pointers will have to be casted differently*/
 
-     /*Calibrate the start and end for timer so it can be subtracted out*/
-    start_t = clock(); /*grab clock timing*/
-    end_t = clock();  /*stop timer*/
-    /*Use the count value to calibrate the timing in and out of the functions*/
-    cal_t = (end_t - start_t); /*Count value of systick timer*/
-    printf("BBB Clock Cal Timing = %ld \n",cal_t); /*Print Cal Results*/
-
     /*Grab the clock time start*/
-    start_t = clock();
+    start = clock();
     /*run the memset function to be tested*/
     memset(dst_memset_ptr, MEMSET_VALUE, memset_test_len);
     /*Grab the clock time start*/
-    end_t = clock();
+    end = clock();
     /*Record the amount that it took to run the memset plus subtract out the cal value*/
-    result_t = ((end_t - start_t) - cal_t);
-    printf("BBB stdlib_memmove runs in = %ld\n\n\n",result_t); /*Print the results of the run out to the terminal*/
+    result = ((end - start));
+    /*Print the results of the run out to the terminal*/
+    printf("BBB stdlib_memmove runs in = %ld\n**************\n\n",result); 
 
     free_words(dst_memset_ptr);
 

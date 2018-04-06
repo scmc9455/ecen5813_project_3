@@ -13,10 +13,11 @@ The included function declarations are
 6. PORTD_Clear
 7. PORTB_Toggle
 8. PORTD_Toggle
+9. GPIO_nrf_init (Updated April 5th, 2018)
 
 @author - Scott McElroy
 
-@date - February 25, 2018
+@date - February 25, 2018 (Updated April 5th, 2018)
 
 Created for ECEN5813
 **********************************************************************************************/
@@ -31,6 +32,7 @@ Created for ECEN5813
 
 #define __SIM_SCGC5_PORTB    ((uint32_t)1 << 10)
 #define __SIM_SCGC5_PORTD    ((uint32_t)1 << 12)
+#define PORTE_CG    (1 << 13)
 
 /*BITS corresponding to the pins of the register*/
 #define PIN18              ((uint8_t)18)
@@ -43,8 +45,19 @@ Created for ECEN5813
 #define __PORTB_PCR19        (*((volatile uint32_t *)(0x4004A04C))) 
 /*direct dereferencing to PORTD PTD1 crtl*/
 #define __PORTD_PCR1         (*((volatile uint32_t *)(0x4004C004)))
+/*Register define associated for the SPI port with PORTE*/
+#define __PORTE_PCR1  (*((uint8_t *)(0x4004D004)))
+#define __PORTE_PCR2  (*((uint8_t *)(0x4004D008)))
+#define __PORTE_PCR3  (*((uint8_t *)(0x4004D00C)))
+#define __PORTE_PCR4  (*((uint8_t *)(0x4004D010)))
+#ifndef __ALT2
+#define __ALT2        (0x010 << 8)
+#endif
 /*Value specified for the PCR functions*/
-#define __ALT1               (0b001 << 8) 
+#define __ALT1               (0b001 << 8)
+#ifndef __ALT2 
+#define __ALT2               (0b010 << 8) 
+#endif
 
 /*direct dereferencing to GPIOB direction crtl register*/
 #define __GPIOB_PDDR         (*((volatile uint32_t *)(0x400FF054))) 
@@ -176,6 +189,15 @@ void PORTB_Toggle(uint8_t bit_num);
 void PORTD_Toggle(uint8_t bit_num);
 
 /*********************************************************************************************/
+/******************************GPIO_nrf_init***************************************************/
+/**********************************************************************************************
+@brief- This function initializes the SPI port for the NRF device
+
+@param - void
+@return - void
+**********************************************************************************************/
+
+void GPIO_nrf_init(void);
 
 #endif /*__GPIO_H__*/
 

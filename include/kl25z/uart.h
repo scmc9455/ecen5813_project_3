@@ -58,7 +58,9 @@ typedef enum{
 #define __PORTA_PCR1 (*((volatile uint32_t *)(0x40049004)))
 #define __PORTA_PCR2 (*((volatile uint32_t *)(0x40049008)))
 #define __ALT0       (0b000 << 8)
+#ifndef __ALT2
 #define __ALT2       (0b010 << 8)
+#endif
 
 /*UART Defines*/
 #define __UART0_BDH  (*((volatile uint8_t *)(0x4006A000)))

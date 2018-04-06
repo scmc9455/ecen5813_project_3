@@ -13,15 +13,16 @@ The included function declarations are
 6. PORTD_Clear
 7. PORTB_Toggle
 8. PORTD_Toggle
+9. GPIO_nrf_init (Updated April 5th, 2018)
 
 @author - Scott McElroy
 
-@date - February 25, 2018
+@date - February 25, 2018 (Updated April 5th, 2018)
 
 Created for ECEN5813
 **********************************************************************************************/
-#include "gpio.h"
 
+#include "gpio.h"
 
 /*********************************************************************************************/
 /******************************GPIO_Configure*************************************************/
@@ -149,6 +150,28 @@ void PORTB_Toggle(uint8_t bit_num)
 void PORTD_Toggle(uint8_t bit_num)
 {
     __GPIOD_PTOR |= (0x1 << bit_num); /*toggles port d register based on bit number*/
+}
+
+/*********************************************************************************************/
+/******************************GPIO_nrf_init***************************************************/
+/**********************************************************************************************
+@brief- This function initializes the SPI port for the NRF device
+
+@param - void
+@return - void
+**********************************************************************************************/
+
+void GPIO_nrf_init(void)
+{
+    /*Configures PortE for the NRF device*/
+    __SIM_SCGC5_ADDR |= PORTE_CG;
+
+    /*Configure the port pins for SPI*/
+    __PORTE_PCR1 |= __ALT2;
+    __PORTE_PCR2 |= __ALT2;
+    __PORTE_PCR3 |= __ALT2;
+    __PORTE_PCR4 |= __ALT2;
+
 }
 
 /*********************************************************************************************/

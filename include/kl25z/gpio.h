@@ -32,7 +32,7 @@ Created for ECEN5813
 
 #define __SIM_SCGC5_PORTB    ((uint32_t)1 << 10)
 #define __SIM_SCGC5_PORTD    ((uint32_t)1 << 12)
-#define PORTE_CG    (1 << 13)
+#define PORTD_CG    (1 << 12)
 
 /*BITS corresponding to the pins of the register*/
 #define PIN18              ((uint8_t)18)
@@ -45,19 +45,19 @@ Created for ECEN5813
 #define __PORTB_PCR19        (*((volatile uint32_t *)(0x4004A04C))) 
 /*direct dereferencing to PORTD PTD1 crtl*/
 #define __PORTD_PCR1         (*((volatile uint32_t *)(0x4004C004)))
-/*Register define associated for the SPI port with PORTE*/
-#define __PORTE_PCR1  (*((uint8_t *)(0x4004D004)))
-#define __PORTE_PCR2  (*((uint8_t *)(0x4004D008)))
-#define __PORTE_PCR3  (*((uint8_t *)(0x4004D00C)))
-#define __PORTE_PCR4  (*((uint8_t *)(0x4004D010)))
-#ifndef __ALT2
-#define __ALT2        (0x010 << 8)
-#endif
+/*Register define associated for the SPI port with PORTD*/
+#define __PORTD_PCR0  (*((volatile uint32_t *)(0x4004C000)))
+#define __PORTD_PCR1  (*((volatile uint32_t *)(0x4004C004)))
+#define __PORTD_PCR2  (*((volatile uint32_t *)(0x4004C008)))
+#define __PORTD_PCR3  (*((volatile uint32_t *)(0x4004C00C)))
+
 /*Value specified for the PCR functions*/
 #define __ALT1               (0b001 << 8)
 #ifndef __ALT2 
 #define __ALT2               (0b010 << 8) 
 #endif
+/*Value used for the SPI0 CS pin*/
+#define PSC0_PTD0     (0x1)
 
 /*direct dereferencing to GPIOB direction crtl register*/
 #define __GPIOB_PDDR         (*((volatile uint32_t *)(0x400FF054))) 

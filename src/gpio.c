@@ -164,15 +164,18 @@ void PORTD_Toggle(uint8_t bit_num)
 void GPIO_nrf_init(void)
 {
     /*Configures PortE for the NRF device*/
-    __SIM_SCGC5_ADDR |= PORTE_CG;
+    __SIM_SCGC5_ADDR |= PORTD_CG;
 
     /*Configure the port pins for SPI*/
-    __PORTE_PCR1 |= __ALT2;
-    __PORTE_PCR2 |= __ALT2;
-    __PORTE_PCR3 |= __ALT2;
-    __PORTE_PCR4 |= __ALT2;
-
+    __PORTD_PCR1 |= __ALT2;
+    __PORTD_PCR2 |= __ALT2;
+    __PORTD_PCR3 |= __ALT2;
+    __PORTD_PCR0 |= __ALT2;
+    /*Set logic value of CS and direction of GPIO*/
+    __GPIOD_PSOR |= PSC0_PTD0; /*Pin0 /CS value*/
+    __GPIOD_PDDR |= PSC0_PTD0; /*Set the pin direction*/
 }
+
 
 /*********************************************************************************************/
 /******************************END of file****************************************************/

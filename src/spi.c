@@ -36,17 +36,21 @@ GPIO must be initiated first before spi_init.
 
 void SPI_configure(void)
 {
-    /*Enable the clock gate for the SPI*/
-    __SIM_SCGC4 |= SPI1_CG;
-    /*Put the SPI into master mode and slave select pin selected*/
-    __SPI1_C1 |= (MSTR + SSOE + LSBFE);
-    /*Master_mode fault mode disabled*/
-    __SPI1_C2 |= MODFEN;
-    /*Divider prescaler*/
-    __SPI1_BR &= (SPPR + SPR);
-
+    /*Enable the clock gate for the SPI0*/
+    __SIM_SCGC4 |= SPI0_CG;
+    /*initialize the pins for the SPI in GPIO*/
+    GPIO_nrf_init();
     /*Enable the SPI controller*/
-    __SPI1_C1 |= SPE;
+    __SPI0_C1 |= SPE;
+
+    /*Put the SPI into master mode and slave select pin selected*/
+    __SPI0_C1 |= (MSTR + SSOE + LSBFE);
+    /*Clear the CPHA to set polarity correctly*/
+    __SPI0_C1 &= ~(CPHA + CPOL);
+    /*Master_mode fault mode disabled*/
+    __SPI0_C2 |= MODFEN;
+    /*Divider prescaler*/
+    __SPI0_BR &= ~(SPPR + SPR);
 }
 
 /*********************************************************************************************/
@@ -69,8 +73,8 @@ spi_e SPI_read_byte(uint8_t *spi_read_ptr)
 
     /*This function is blocking*/
     /*First read the SPI read buffer flag then read the register*/
-    while(((__SPI1_S & SPRF)>>SPRF_SHIFT) != 1);
-    *spi_read_ptr = __SPI1_D;
+    while(((__SPI0_S & SPRF)>>SPRF_SHIFT) != 1);
+    *spi_read_ptr = __SPI0_D;
 
     return SPI_SUCCESS;   
 }
@@ -95,8 +99,8 @@ spi_e SPI_write_byte(uint8_t *spi_write_ptr)
 
     /*This function is blocking*/
     /*First read the SPI transmit buffer flag then write to the register*/
-    while(((__SPI1_S & SPTEF)>>SPTEF_SHIFT) != 1);
-    __SPI1_D = *spi_write_ptr;
+    SPI_flush();
+    __SPI0_D = *spi_write_ptr;
 
     return SPI_SUCCESS;   
 }
@@ -126,7 +130,7 @@ spi_e SPI_send_packet(uint8_t *spi_packet_ptr, uint32_t length)
     {
         /*SPI flush serves as the blocking function*/
         SPI_flush(); /*Call the flush function to make sure that the transmit buffer is empty*/
-        __SPI1_D = *spi_packet_ptr; /*Send the new variable to the transmit buffer when ready*/
+        __SPI0_D = *spi_packet_ptr; /*Send the new variable to the transmit buffer when ready*/
     }
 
     return SPI_SUCCESS;   
@@ -144,7 +148,7 @@ spi_e SPI_send_packet(uint8_t *spi_packet_ptr, uint32_t length)
 spi_e SPI_flush(void)
 {
     /*Blocking function is a while loop until the transmit buffer is empty*/
-    while(((__SPI1_S & SPTEF)>>SPTEF_SHIFT) != 0);
+    while(((__SPI0_S & SPTEF)>>SPTEF_SHIFT) != 1);
     return SPI_SUCCESS;
 }
 

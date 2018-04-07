@@ -25,18 +25,19 @@ Created for ECEN5813
 
 #include <stdint.h>
 #include <stdlib.h>
+#include "gpio.h"
 
 #define __SIM_SCGC4 (*((uint32_t *)(0x40048034)))
 #define __SIM_SCGC5 (*((uint32_t *)(0x40048038)))
-#define SPI1_CG     (1 << 23)
+#define SPI0_CG     (1 << 22)
 
 
-#define __SPI1_C1     (*((uint8_t *)(0x40077000)))
-#define __SPI1_C2     (*((uint8_t *)(0x40077001)))
-#define __SPI1_BR     (*((uint8_t *)(0x40077002)))
-#define __SPI1_S      (*((uint8_t *)(0x40077003)))
-#define __SPI1_D      (*((uint8_t *)(0x40077005)))
-#define __SPI1_M      (*((uint8_t *)(0x40077007)))
+#define __SPI0_C1     (*((uint8_t *)(0x40076000)))
+#define __SPI0_C2     (*((uint8_t *)(0x40076001)))
+#define __SPI0_BR     (*((uint8_t *)(0x40076002)))
+#define __SPI0_S      (*((uint8_t *)(0x40076003)))
+#define __SPI0_D      (*((uint8_t *)(0x40076005)))
+#define __SPI0_M      (*((uint8_t *)(0x40076007)))
 #define MSTR        (1 << 4)
 #define SSOE        (1 << 1)
 #define LSBFE       (0x1)
@@ -47,7 +48,9 @@ Created for ECEN5813
 #define SPRF        (1 << 7)
 #define SPTEF       (1 << 5)
 #define SPRF_SHIFT  (7)
-#define SPTEF_SHIFT  (5)
+#define SPTEF_SHIFT (5)
+#define CPOL        (1 << 3)
+#define CPHA        (1 << 2)
 
 typedef enum{
     SPI_PTR_FAILURE=0,

@@ -14,24 +14,24 @@ ifeq ($(PLATFORM),KL25Z)
 SRCS = ./data1.c ./debug.c ./memory.c ./conversion.c \
 ./project1.c ./arch_arm32.c ./main.c ./gpio.c ./circbuf.c ./uart.c \
 ./system_MKL25Z4.c ./startup_MKL25Z4.S ./project2.c ./dma.c \
-./project3.c ./mem_profiler_kl25z.c ./spi.c
+./project3.c ./mem_profiler_kl25z.c ./spi.c ./nodic.c
 
 else ifeq ($(PLATFORM),KL25Z_PRO)
 SRCS = ./memory.c ./main.c ./dma.c \
 ./mem_profiler_kl25z.c ./project3.c \
-./system_MKL25Z4.c ./startup_MKL25Z4.S ./spi.c
+./system_MKL25Z4.c ./startup_MKL25Z4.S ./spi.c ./nodic.c
 
 else ifeq ($(PLATFORM),BBB)
 SRCS = ./data1.c ./debug.c ./memory.c ./conversion.c \
-./project1.c ./main.c ./circbuf.c ./project3.c ./project2.c
+./project1.c ./main.c ./circbuf.c ./project3.c ./project2.c ./nodic.c
 
 else ifeq ($(PLATFORM),BBB_PRO)
 SRCS = ./data1.c ./debug.c ./memory.c ./conversion.c \
-./main.c ./circbuf.c ./project3.c ./mem_profiler_bbb.c
+./main.c ./circbuf.c ./project3.c ./mem_profiler_bbb.c ./nodic.c
 
 else ifeq ($(PLATFORM),HOST)
 SRCS = ./data1.c ./debug.c ./memory.c ./conversion.c \
-./project1.c ./main.c ./circbuf.c ./project3.c ./mem_profiler_bbb.c
+./project1.c ./main.c ./circbuf.c ./project3.c ./mem_profiler_bbb.c ./nodic.c
 #if no platform is speced, make defaults to native compiler
 
 else ifeq ($(PLATFORM),CMOCKA)
@@ -42,6 +42,6 @@ SRCS = ./data1.c ./debug.c ./memory.c ./conversion.c \
 else
 SRCS = ./main.c \
 ./data1.c ./debug.c ./memory.c ./conversion.c \
-./project1.c ./circbuf.c ./project2.c ./project3.c  
+./project1.c ./circbuf.c ./project2.c ./project3.c ./nodic.c
 endif
 

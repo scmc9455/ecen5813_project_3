@@ -24,6 +24,8 @@ Created for ECEN5813
 
 #ifdef KL25Z
 #include "dma.h"
+#include "spi.h"
+#include "gpio.h"
 #endif
 
 #if defined (HOST) || defined (BBB_PRO)

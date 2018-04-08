@@ -49,8 +49,8 @@ Created for ECEN5813
 #define NRF_TRANSMIT_DISABLE  (__GPIOD_PSOR |= CHIP_SEL_PTD6)
 
 /*Commands for NRF*/
-#define __R_REGISTER           (0x1F) /*ORed with*/
-#define __W_REGISTER           (0x3F) /*ORed with*/ 
+#define __R_REGISTER           (0x00) /*ORed with*/
+#define __W_REGISTER           (0x20) /*ORed with*/
 #define __R_RX_PAYLOAD         (0x61)
 #define __W_TX_PAYLOAD         (0xA0)
 #define __FLUSH_TX             (0xE1)
@@ -247,3 +247,4 @@ void nrf_flush_rx_fifo(void);
 /*********************************************************************************************/
 /***********************************End of File***********************************************/
 /*********************************************************************************************/
+

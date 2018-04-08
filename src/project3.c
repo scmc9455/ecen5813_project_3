@@ -29,19 +29,40 @@ Created for ECEN5813
 void project3(void)
 {
 #ifdef KL25Z
+  /***********************************/
     /*Variables for reading back outputs*/
     uint8_t status_reg=0, config_reg=0, rf_setup_reg=0, rf_ch_reg=0, fifo_status_reg=0;
     /*To read the NRF device, it needs to be configured*/
-    SPI_configure();
+    SPI_configure(); /*Writes to the config register and read back from the read config below*/
     nrf_init();
+    /****************/
     /*Read Status*/
     status_reg = nrf_read_status();
+    /**************/
     /*Read Config*/
     config_reg = nrf_read_config();
-    /*Read RF_Setup*/
+    /*************************/
+    /*Read and write RF_Setup*/
+    nrf_write_rf_setup(0x09); /*write a random value to RF_SETUP*/
     rf_setup_reg = nrf_read_rf_setup();
-    /*Read RF_Channel*/
+    /***************************/
+    /*Read and write RF_Channel*/
+    nrf_write_rf_ch(0x7F); /*write a random value to RF_CH*/
     rf_ch_reg = nrf_read_rf_ch();
+    /***********************/
+    /*Write the TX_addr reg*/
+    uint8_t *tx_add_write_ptr = malloc(5);
+    uint8_t *tx_add_read_ptr = malloc(5);
+    /*Load the address pointer*/
+    for(uint8_t i=0;i<5;i++)
+    {
+        *(tx_add_write_ptr+i) = (uint8_t)0xA5;
+    }
+    /*Write to the TX_address*/
+    nrf_write_TX_ADDR(tx_add_write_ptr);
+    /*Read back the address in the TX register*/
+    nrf_read_TX_ADDR(tx_add_read_ptr);
+    /*******************/
     /*Read FIFO_Status*/
     fifo_status_reg = nrf_read_fifo_status();
     /*While loops so compiler works*/
@@ -176,14 +197,14 @@ void project3(void)
     /******************************************************************************/
 
     /*Variable usage so compiler doesn't output an error*/
-    while(memset_dma_kl25z_count_10 || memset_dma_kl25z_count_100 || memset_dma_kl25z_count_1000 ){};
-    while(memset_dma_kl25z_count_10_32bit){};
-    while(memmove_dma_kl25z_count_10 || memmove_dma_kl25z_count_100 || memmove_dma_kl25z_count_1000 ){};
-    while(memmove_dma_kl25z_count_10_32bit){};
-    while(my_memset_kl25z_count_10 || my_memset_kl25z_count_100 || my_memset_kl25z_count_1000 ){};
-    while(my_memmove_kl25z_count_10 || my_memmove_kl25z_count_100 || my_memmove_kl25z_count_1000 ){};
-    while(memmove_kl25z_count_10 || memmove_kl25z_count_100 || memmove_kl25z_count_1000 ){};
-    while(memset_kl25z_count_10 || memset_kl25z_count_100 || memset_kl25z_count_1000 ){};
+    while(memset_dma_kl25z_count_10 || memset_dma_kl25z_count_100 || memset_dma_kl25z_count_1000 );
+    while(memset_dma_kl25z_count_10_32bit);
+    while(memmove_dma_kl25z_count_10 || memmove_dma_kl25z_count_100 || memmove_dma_kl25z_count_1000 );
+    while(memmove_dma_kl25z_count_10_32bit);
+    while(my_memset_kl25z_count_10 || my_memset_kl25z_count_100 || my_memset_kl25z_count_1000 );
+    while(my_memmove_kl25z_count_10 || my_memmove_kl25z_count_100 || my_memmove_kl25z_count_1000 );
+    while(memmove_kl25z_count_10 || memmove_kl25z_count_100 || memmove_kl25z_count_1000 );
+    while(memset_kl25z_count_10 || memset_kl25z_count_100 || memset_kl25z_count_1000 );
 
 #endif /*KL25Z_PRO*/
 

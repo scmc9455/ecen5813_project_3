@@ -1,3 +1,4 @@
+
 /*********************************************************************************************
 @file - spi.c
 @brief - spi.c file is the source file for the spi functionality
@@ -44,7 +45,7 @@ void SPI_configure(void)
     __SPI0_C1 |= SPE;
 
     /*Put the SPI into master mode and slave select pin selected*/
-    __SPI0_C1 |= (MSTR + SSOE + LSBFE);
+    __SPI0_C1 |= (MSTR + SSOE);
     /*Clear the CPHA to set polarity correctly*/
     __SPI0_C1 &= ~(CPHA + CPOL);
     /*Master_mode fault mode disabled*/
@@ -101,6 +102,7 @@ spi_e SPI_write_byte(uint8_t *spi_write_ptr)
     /*First read the SPI transmit buffer flag then write to the register*/
     SPI_flush();
     __SPI0_D = *spi_write_ptr;
+    SPI_flush();
 
     return SPI_SUCCESS;   
 }
@@ -155,5 +157,4 @@ spi_e SPI_flush(void)
 /**************************************************************************************/
 /********************************END OF FILE*******************************************/
 /**************************************************************************************/
-
 

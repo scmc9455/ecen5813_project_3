@@ -77,7 +77,7 @@ Created for ECEN5813
 /*direct dereferencing to GPIOB CLEAR crtl register*/
 #define __GPIOB_PCOR         (*((volatile uint32_t *)(0x400FF048)))
 /*direct dereferencing to GPIOD CLEAR crtl register*/
-#define __GPIOD_PCOR         (*((volatile uint32_t *)(0x400FF088)))
+#define __GPIOD_PCOR         (*((volatile uint32_t *)(0x400FF0C8)))
  
 /*direct dereferencing to GPIOB TOGGLE crtl register*/
 #define __GPIOB_PTOR         (*((volatile uint32_t *)(0x400FF04C)))
@@ -208,3 +208,4 @@ void GPIO_nrf_init(void);
 
 /*********************************************************************************************/
 /******************************END of file****************************************************/
+

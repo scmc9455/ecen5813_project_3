@@ -19,6 +19,10 @@ This file contains functions definitions for the following
 12. nrf_read_fifo_status
 13. nrf_flush_tx_fifo
 14. nrf_flush_rx_fifo
+15. nrf_init
+
+******NOTE: To use these functions the SPI_configure function must have previously been called
+The nordic device will be connected to SPI0 Pins: PTD1, PTD2, PTD3, PTD5, PTD6
 
 @author - Scott McElroy
 
@@ -32,6 +36,56 @@ Created for ECEN5813
 
 #include <stdint.h>
 #include <stdlib.h>
+#include "gpio.h"
+#include "spi.h"
+
+/*Using PIN5 as the Chip enable PTD5, these MACRO can only be used after SPI_CONFIG has run*/
+/*To be used in the main program functions to enable and disable the NRF chip*/
+#define NRF_CHIP_ENABLE       (__GPIOD_PSOR |= CHIP_EN_PTD5)
+#define NRF_CHIP_DISABLE      (__GPIOD_PCOR |= CHIP_EN_PTD5)
+/*Chip select PTD6 (active low), these MACRO can only be used after SPI_CONFIG has run*/
+/*MARCO used to handle the /CS pin functionality and go around the built in SPI CS pin*/
+#define NRF_TRANSMIT_ENABLE   (__GPIOD_PCOR |= CHIP_SEL_PTD6)
+#define NRF_TRANSMIT_DISABLE  (__GPIOD_PSOR |= CHIP_SEL_PTD6)
+
+/*Commands for NRF*/
+#define __R_REGISTER           (0x1F) /*ORed with*/
+#define __W_REGISTER           (0x3F) /*ORed with*/ 
+#define __R_RX_PAYLOAD         (0x61)
+#define __W_TX_PAYLOAD         (0xA0)
+#define __FLUSH_TX             (0xE1)
+#define __FLUSH_RX             (0xE2)
+#define __REUSE_TX_PL          (0xE3)
+#define __ACTIVATE             (0x50)
+#define __R_RX_PL_WID          (0x60)
+#define __W_ACK_PAYLOAD        (0xAF) /*ANDed with*/
+#define __W_TX_PAYLOAD_NO_ACK  (0xB0)
+#define __NOPER                (0xFF)
+
+/*Register definitions*/
+#define __CONFIG        (0x00)
+#define __RF_SETUP      (0x06)
+#define __RF_CH         (0x05)
+#define __STATUS        (0x07)
+#define __TX_ADDR       (0x10)
+#define __FIFO_STATUS   (0x17)
+
+/*Defines for power on and off*/
+#define NRF_POWER_ON      (1)
+#define NRF_POWER_OFF     (0)
+#define NRF_POWER_UP_MASK (0x02)
+#define NRF_CONFIG_START  (0b01111010) /*Mask Interrupts and enable CRC POWER_UP and TX*/
+
+/*********************************************************************************************/
+/***********************************nrf_init**************************************************/
+/**********************************************************************************************
+@brief- This function initializes the NRF DEVICE
+
+@param - void
+@return - void
+**********************************************************************************************/
+
+void nrf_init(void);
 
 /*********************************************************************************************/
 /***********************************nrf_read_register*****************************************/
@@ -51,10 +105,10 @@ uint8_t nrf_read_register(uint8_t nordic_reg);
 
 @param - nordic_reg: register inside the nordic device that
 @param - value: value to pass to the nordic device register
-@return - return: contents of register
+@return - void
 **********************************************************************************************/
 
-uint8_t nrf_write_register(uint8_t nordic_reg, uint8_t value);
+void nrf_write_register(uint8_t nordic_reg, uint8_t value);
 
 /*********************************************************************************************/
 /***********************************nrf_read_status*******************************************/
@@ -77,6 +131,17 @@ uint8_t nrf_read_status(void);
 **********************************************************************************************/
 
 uint8_t nrf_read_config(void);
+
+/*********************************************************************************************/
+/**********************************nrf_write_config*******************************************/
+/**********************************************************************************************
+@brief- This function writes the configuration register inside the nordic IC
+
+@param - config: configuration of the NRF
+@return - void
+**********************************************************************************************/
+
+void nrf_write_config(uint8_t config);
 
 /*********************************************************************************************/
 /***********************************nrf_read_rf_setup*****************************************/

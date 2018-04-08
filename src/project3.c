@@ -10,7 +10,7 @@ Functions Include
 
 @author - Scott McElroy
 
-@date - March 31, 2018
+@date - April 7, 2018
 
 Created for ECEN5813
 **********************************************************************************************/
@@ -28,6 +28,27 @@ Created for ECEN5813
 
 void project3(void)
 {
+#ifdef KL25Z
+    /*Variables for reading back outputs*/
+    uint8_t status_reg=0, config_reg=0, rf_setup_reg=0, rf_ch_reg=0, fifo_status_reg=0;
+    /*To read the NRF device, it needs to be configured*/
+    SPI_configure();
+    nrf_init();
+    /*Read Status*/
+    status_reg = nrf_read_status();
+    /*Read Config*/
+    config_reg = nrf_read_config();
+    /*Read RF_Setup*/
+    rf_setup_reg = nrf_read_rf_setup();
+    /*Read RF_Channel*/
+    rf_ch_reg = nrf_read_rf_ch();
+    /*Read FIFO_Status*/
+    fifo_status_reg = nrf_read_fifo_status();
+    /*While loops so compiler works*/
+    while(status_reg || config_reg || rf_setup_reg || rf_ch_reg || fifo_status_reg);
+
+#endif
+
 #ifdef KL25Z_PRO
     /*********************************************************************/
     /*##########Profiler run for memset using DMA on KL25Z###############*/

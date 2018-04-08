@@ -26,6 +26,7 @@ Created for ECEN5813
 #include "dma.h"
 #include "spi.h"
 #include "gpio.h"
+#include "nordic.h"
 #endif
 
 #if defined (HOST) || defined (BBB_PRO)

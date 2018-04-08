@@ -50,6 +50,9 @@ Created for ECEN5813
 #define __PORTD_PCR1  (*((volatile uint32_t *)(0x4004C004)))
 #define __PORTD_PCR2  (*((volatile uint32_t *)(0x4004C008)))
 #define __PORTD_PCR3  (*((volatile uint32_t *)(0x4004C00C)))
+/*Chip enable and chip select defines*/
+#define __PORTD_PCR5  (*((volatile uint32_t *)(0x4004C014)))
+#define __PORTD_PCR6  (*((volatile uint32_t *)(0x4004C018)))
 
 /*Value specified for the PCR functions*/
 #define __ALT1               (0b001 << 8)
@@ -58,6 +61,8 @@ Created for ECEN5813
 #endif
 /*Value used for the SPI0 CS pin*/
 #define PSC0_PTD0     (0x1)
+#define CHIP_EN_PTD5  (1 << 5)
+#define CHIP_SEL_PTD6 (1 << 6)
 
 /*direct dereferencing to GPIOB direction crtl register*/
 #define __GPIOB_PDDR         (*((volatile uint32_t *)(0x400FF054))) 

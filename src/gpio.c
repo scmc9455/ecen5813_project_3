@@ -171,9 +171,19 @@ void GPIO_nrf_init(void)
     __PORTD_PCR2 |= __ALT2;
     __PORTD_PCR3 |= __ALT2;
     __PORTD_PCR0 |= __ALT2;
+    /*Pin needed for the Chip enable and chip select function*/
+    __PORTD_PCR5 |= __ALT1; /*Chip enable*/
+    __PORTD_PCR6 |= __ALT1; /*Chip select for SPI*/
     /*Set logic value of CS and direction of GPIO*/
-    __GPIOD_PSOR |= PSC0_PTD0; /*Pin0 /CS value*/
+    __GPIOD_PSOR |= PSC0_PTD0; /*Pin0 for built-in /CS value this GPIO will not be used*/
     __GPIOD_PDDR |= PSC0_PTD0; /*Set the pin direction*/
+    /*Direction and config of Chip enable for NRF*/
+    __GPIOD_PCOR |= CHIP_EN_PTD5; /*Clear the PTD5 before flipping to output*/
+    __GPIOD_PDDR |= CHIP_EN_PTD5; /*Set the pin direction for the chip enable*/
+    /*Direction and config of Chip enable for NRF*/
+    __GPIOD_PSOR |= CHIP_SEL_PTD6; /*SET the PTD6 before flipping to output to float /SS high*/
+    __GPIOD_PDDR |= CHIP_SEL_PTD6; /*Set the pin direction for the chip select*/
+
 }
 
 
